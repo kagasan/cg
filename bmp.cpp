@@ -76,8 +76,20 @@ void BMP::drawTriangle(
         int g,
         int b
 ){
-    for(int y=0, idx=0;y<Height;y++){
-        for(int x=0;x<Width;x++,idx+=3){
+	int xmn = x1;
+	int xmx = x1;
+	int ymn = y1;
+	int ymx = y1;
+	if (xmn > x2)xmn = x2;
+	if (xmn > x3)xmn = x3;
+	if (xmx < x2)xmx = x2;
+	if (xmx < x3)xmx = x3;
+	if (ymn > y2)ymn = y2;
+	if (ymn > y3)ymn = y3;
+	if (ymx < y2)ymx = y2;
+	if (ymx < y3)ymx = y3;
+	for (int y = ymn; y <= ymx; y++){
+		for (int x = xmn; x <= xmx; x++){
 			double x12 = x2 - x1;
 			double y12 = y2 - y1;
 			double x2p = x - x2;
@@ -94,12 +106,13 @@ void BMP::drawTriangle(
 			double c2 = x23*y3p - y23*x3p;
 			double c3 = x31*y1p - y31*x1p;
 			if ((c1 > 0 && c2 > 0 && c3 > 0) || (c1 < 0 && c2 < 0 && c3 < 0)){
+				int idx = (x + Width*y) * 3;
 				data[idx] = r;
 				data[idx + 1] = g;
 				data[idx + 2] = b;
 			}
-        }
-    }
+		}
+	}
 }
 
 void BMP::write(const std::string &filename){
