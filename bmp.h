@@ -46,5 +46,5 @@ class BMP{
         int g,
         int b
     );
-    void write(const std::string &filename = "out.bmp");
+    void write(const std::string &filename = "out.bmp", bool viewer = true);
 };

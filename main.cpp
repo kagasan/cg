@@ -22,9 +22,8 @@ int main(){
 	}
 	sort(zsort.begin(), zsort.end());
 
-
 	for (int z = 0; z < zsort.size();z++){
-		int i = zsort.size() - zsort[z].second - 1;
+		int i = zsort[z].second;
 		double x12 = bunny.vertex[bunny.face[i].y].x - bunny.vertex[bunny.face[i].x].x;
 		double y12 = bunny.vertex[bunny.face[i].y].y - bunny.vertex[bunny.face[i].x].y;
 		double z12 = bunny.vertex[bunny.face[i].y].z - bunny.vertex[bunny.face[i].x].z;
@@ -34,8 +33,13 @@ int main(){
 		double xc = y12 * z23 - z12*y23;
 		double yc = z12 * x23 - x12*z23;
 		double zc = x12 * y23 - y12*x23;
-		double rad = std::acos(zc / std::sqrt(xc*xc + yc*yc + zc*zc));
-		int color = 128 + 127 * rad / acos(-1);
+		int r = 255 * std::abs(zc) / std::sqrt(xc*xc + yc*yc + zc*zc);
+		int g = r;
+		int b = r;
+		if (0){
+			g = 0;
+			b = 0;
+		}
 		bmp.drawTriangle(
 			(bunny.vertex[bunny.face[i].x].x * 1024 + 100)*4,
 			900-(bunny.vertex[bunny.face[i].x].y * 1024)*4,
@@ -43,11 +47,11 @@ int main(){
 			900 - (bunny.vertex[bunny.face[i].y].y * 1024) * 4,
 			(bunny.vertex[bunny.face[i].z].x * 1024 + 100)*4,
 			900 - (bunny.vertex[bunny.face[i].z].y * 1024) * 4,
-			color, color, color
+			r, g, b
 		);
 	}
 	
-	bmp.write();
+	bmp.write("bunny.bmp");
 
     return 0;
 }

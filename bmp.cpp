@@ -115,7 +115,7 @@ void BMP::drawTriangle(
 	}
 }
 
-void BMP::write(const std::string &filename){
+void BMP::write(const std::string &filename, bool viewer){
     ofs.open(filename, std::ios::out | std::ios::binary | std::ios::trunc);
 	
 	//File Header
@@ -146,5 +146,32 @@ void BMP::write(const std::string &filename){
 			writeUC(data[idx + 1]);
 			writeUC(data[idx]);
 		}
+	}
+	if (viewer){
+		std::ofstream vofs(filename + ".viewer.html");
+		vofs << "<html>" << std::endl;
+		vofs << "<head>" << std::endl;
+		vofs << "<title>" << filename << "</title>" << std::endl;
+		vofs << "<script type='text/javascript'>" << std::endl;
+		vofs << "function reloadImg(){" << std::endl;
+		vofs << "if(document.forms.fm.check.checked){" << std::endl;
+		vofs << "img.src='" << filename << "?r=' + Math.random();" << std::endl;
+		vofs << "}" << std::endl;
+		vofs << "setTimeout('reloadImg()',parseInt(document.forms.fm.txt.value,10));" << std::endl;
+		vofs << "}" << std::endl;
+		vofs << "window.onload=function(){" << std::endl;
+		vofs << "document.forms.fm.check.checked = true;" << std::endl;
+		vofs << "reloadImg();" << std::endl;
+		vofs << "}" << std::endl;
+		vofs << "</script>" << std::endl;
+		vofs << "</head>" << std::endl;
+		vofs << "<body>" << std::endl;
+		vofs << "<form name='fm'>" << std::endl;
+		vofs << "<input name='check' type='checkbox'>:auto reload<br>" << std::endl;
+		vofs << "<input name='txt' type='text' value='1000'>:wait(ms)" << std::endl;
+		vofs << "</form>" << std::endl;
+		vofs << "<img src='" << filename << "' name='img'>" << std::endl;
+		vofs << "</body>" << std::endl;
+		vofs << "</html>" << std::endl;
 	}
 }
